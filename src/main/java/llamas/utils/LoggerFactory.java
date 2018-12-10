@@ -1,4 +1,4 @@
-package llamas.routesim.utils;
+package llamas.utils;
 
 public class LoggerFactory {
   private static volatile LoggerFactory _instance = null;

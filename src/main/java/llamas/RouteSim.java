@@ -1,6 +1,6 @@
-package llamas.routesim;
+package llamas;
 
-import llamas.routesim.utils.*;
+import llamas.utils.*;
 
 public class RouteSim {
   private Logger logger = LoggerFactory.getInstance().getLogger(getClass());

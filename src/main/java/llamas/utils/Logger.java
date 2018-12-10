@@ -1,4 +1,4 @@
-package llamas.routesim.utils;
+package llamas.utils;
 
 public abstract class Logger {
   protected abstract void print(String logLevel, String message);

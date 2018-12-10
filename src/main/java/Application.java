@@ -1,4 +1,4 @@
-package llamas.routesim;
+import llamas.RouteSim;
 
 public class Application {
 

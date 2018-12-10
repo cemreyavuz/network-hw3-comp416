@@ -1,4 +1,4 @@
-package llamas.routesim;
+package llamas;
 
 public class Message {
 }

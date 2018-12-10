@@ -1,4 +1,4 @@
-package llamas.routesim.utils;
+package llamas.utils;
 
 import java.time.Instant;
 
