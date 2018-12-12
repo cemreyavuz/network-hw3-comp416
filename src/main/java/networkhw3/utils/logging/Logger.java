@@ -1,4 +1,4 @@
-package llamas.utils;
+package networkhw3.utils.logging;
 
 public abstract class Logger {
   protected abstract void print(String logLevel, String message);

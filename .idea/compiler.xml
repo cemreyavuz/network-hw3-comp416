@@ -2,6 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="llamas.routesim_main" target="1.8" />
+      <module name="llamas.routesim_test" target="1.8" />
       <module name="network-hw3-comp416_main" target="1.8" />
       <module name="network-hw3-comp416_test" target="1.8" />
     </bytecodeTargetLevel>

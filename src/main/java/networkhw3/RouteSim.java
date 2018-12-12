@@ -1,6 +1,7 @@
-package llamas;
+package networkhw3;
 
-import llamas.utils.*;
+import networkhw3.utils.logging.Logger;
+import networkhw3.utils.logging.LoggerFactory;
 
 public class RouteSim {
   private Logger logger = LoggerFactory.getInstance().getLogger(getClass());
