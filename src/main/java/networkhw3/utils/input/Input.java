@@ -15,7 +15,7 @@ public class Input {
   private Logger logger = LoggerFactory.getInstance().getLogger(getClass());
   private static volatile Input _instance = null;
   private Scanner input;
-  private ArrayList<Node> nodeList;
+  private ArrayList<Pair> pairList;
   private final String INPUT_FILE_NAME = "input.txt";
 
   private Input() {
@@ -31,28 +31,27 @@ public class Input {
 
   public ArrayList readFile() throws IOException {
     BufferedReader in = null;
-    ArrayList<Node> nodeList = new ArrayList<>();
+    pairList = new ArrayList<>();
     try {
       in = new BufferedReader(new FileReader(INPUT_FILE_NAME));
 
       String line;
       while((line = in.readLine()) != null) {
-        Node n = processData(line);
-        nodeList.add(n);
+        Pair p = processData(line);
+        pairList.add(p);
       }
     }
     catch (IOException e){
       logger.e(e.toString());
     }
-    return nodeList;
+    return pairList;
   }
 
-  private Node processData(String s) {
+  private Pair processData(String s) {
     int indexID = getNodeID(s);
     int nodeID = Integer.parseInt(s.substring(0, indexID));
     Hashtable<Integer, Integer> linkCost = getLinkCost(s);
-    Node n = new Node(nodeID, linkCost);
-    return n;
+    return new Pair<Integer, Hashtable<Integer, Integer>>(nodeID, linkCost);
   }
 
   private int getNodeID(String s) {
@@ -85,7 +84,12 @@ public class Input {
             neighborID = Integer.parseInt(s.substring(i+1,j));
             for(int k = j; k < s.length(); k++) {
               if(s.charAt(k) == ')') {
-                cost = Integer.parseInt(s.substring(j+1,k));
+                try {
+                  cost = Integer.parseInt(s.substring(j+1,k));
+                }
+                catch(NumberFormatException n) {
+                  cost = -1;
+                }
                 return new Pair<>(k ,new Pair<>(neighborID, cost));
               }
             }
