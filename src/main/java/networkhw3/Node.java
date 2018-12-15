@@ -37,16 +37,11 @@ public class Node {
       int tmpDistance = newVector[i] + linkCost.get(m.getSenderID());
       if(distanceTable[i][m.getSenderID()] > tmpDistance) {
         distanceTable[i][m.getSenderID()] = tmpDistance;
-        isChanged = true;
       }
-    }
-    if(isChanged) {
-      sendUpdate();
     }
   }
 
   public boolean sendUpdate() {
-    updateDynamicLinks();
     if(updateDistanceVector()) {
       notifyNeighbors();
       return true;
@@ -112,28 +107,29 @@ public class Node {
         distanceTable[i][i] = r.nextInt(10) + 1;
         dynamicLinks.add(i);
       }
-      distanceTable[i][i] = linkCost.get(i);
-    }
-  }
-
-  private void updateDynamicLinks() {
-    for(int i: dynamicLinks) {
-      if(r.nextBoolean()) {
-        linkCost.put(i, r.nextInt(10)+1);
+      else {
+        distanceTable[i][i] = linkCost.get(i);
       }
     }
   }
 
+  public void updateDynamicLinks(int neighborID, int cost) {
+    linkCost.put(neighborID, cost);
+    distanceTable[neighborID][neighborID] = cost;
+  }
+
   public String toString() {
+    /*
     String s = "";
     s += "\nNodeID: " + nodeID + "\n";
     s += "Link Costs: \n";
     for(Integer key: linkCost.keySet()) {
       s+= "\t" + "NeigborID: " + key + ", Cost: " + linkCost.get(key) + "\n";
     }
+    */
     printTable(distanceTable);
     System.out.println(getForwardingTable());
-    return s;
+    return null;
   }
 
   private void printTable(int arr[][]) {

@@ -15,7 +15,9 @@ public class Input {
   private Logger logger = LoggerFactory.getInstance().getLogger(getClass());
   private static volatile Input _instance = null;
   private Scanner input;
+  private int nodeID;
   private ArrayList<Pair> pairList;
+  private ArrayList<Pair> dynamicLinks = new ArrayList<>();
   private final String INPUT_FILE_NAME = "input.txt";
 
   private Input() {
@@ -29,7 +31,7 @@ public class Input {
     return _instance;
   }
 
-  public ArrayList readFile() throws IOException {
+  public Pair readFile() throws IOException {
     BufferedReader in = null;
     pairList = new ArrayList<>();
     try {
@@ -44,12 +46,12 @@ public class Input {
     catch (IOException e){
       logger.e(e.toString());
     }
-    return pairList;
+    return new Pair<ArrayList, ArrayList>(pairList, dynamicLinks);
   }
 
   private Pair processData(String s) {
     int indexID = getNodeID(s);
-    int nodeID = Integer.parseInt(s.substring(0, indexID));
+    nodeID = Integer.parseInt(s.substring(0, indexID));
     Hashtable<Integer, Integer> linkCost = getLinkCost(s);
     return new Pair<Integer, Hashtable<Integer, Integer>>(nodeID, linkCost);
   }
@@ -88,6 +90,7 @@ public class Input {
                   cost = Integer.parseInt(s.substring(j+1,k));
                 }
                 catch(NumberFormatException n) {
+                  dynamicLinks.add(new Pair<Integer, Integer>(nodeID, neighborID));
                   cost = -1;
                 }
                 return new Pair<>(k ,new Pair<>(neighborID, cost));

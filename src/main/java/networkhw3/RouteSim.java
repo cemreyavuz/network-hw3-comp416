@@ -8,12 +8,15 @@ import networkhw3.utils.logging.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Random;
 
 public class RouteSim {
   private Input input = Input.getInstance();
   private Logger logger = LoggerFactory.getInstance().getLogger(getClass());
   private int numNode;
   private ArrayList<Node> nodeList;
+  private ArrayList<Pair> dynamicLinks;
+  private Random r = new Random();
 
   public RouteSim() {
 
@@ -22,17 +25,36 @@ public class RouteSim {
   public void run() throws IOException {
     logger.i("RouteSim is working!");
     logger.i("RouteSim started to read the input file.");
-    ArrayList pairList = input.readFile();
+    Pair<ArrayList, ArrayList> p = input.readFile();
+    ArrayList pairList = p.getKey();
+    dynamicLinks = p.getValue();
     initializeNodes(pairList);
     runLoop();
   }
 
   private void runLoop() {
-    for(int i = 0; i < 5; i++) {
-      for(Node n: nodeList) {
-        n.sendUpdate();
+    Boolean isChanged = true;
+    int counter = 0;
+    while(isChanged) {
+      isChanged = false;
+      updateDynamicLinks();
+      for (Node n : nodeList) {
+        if (n.sendUpdate())
+          isChanged = true;
       }
-      System.out.println(nodeList);
+      counter++;
+    }
+    System.out.println(counter);
+  }
+
+  private void updateDynamicLinks() {
+    for(Pair<Integer, Integer> p: dynamicLinks) {
+      if(r.nextBoolean()) {
+        int dynamicCost = r.nextInt(10)+1;
+        nodeList.get(p.getKey()).updateDynamicLinks(p.getValue(), dynamicCost);
+        nodeList.get(p.getValue()).updateDynamicLinks(p.getKey(), dynamicCost);
+        // TODO: duplicate changes (not crucial but do it if you have time)
+      }
     }
   }
 
