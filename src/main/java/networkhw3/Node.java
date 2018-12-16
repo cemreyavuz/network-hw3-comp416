@@ -2,11 +2,15 @@ package networkhw3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Random;
 
+import networkhw3.utils.logging.Logger;
+import networkhw3.utils.logging.LoggerFactory;
+
 public class Node {
-  private int nodeID;
+  public int nodeID;
   private Hashtable<Integer, Integer> linkCost;
   private ArrayList<Node> neighborList;
   private int [][] distanceTable;
@@ -14,6 +18,7 @@ public class Node {
   private int nodeNum;
   private ArrayList<Integer> dynamicLinks;
   private Random r = new Random();
+  private Logger logger = LoggerFactory.getInstance().getLogger(getClass());
 
   public Node(int nodeID, Hashtable<Integer, Integer> linkCost, int nodeNum) {
     this.nodeID = nodeID;
@@ -21,6 +26,7 @@ public class Node {
     this.nodeNum = nodeNum;
     dynamicLinks = new ArrayList<>();
     initializeTable();
+    this.toString();
   }
 
   public void addNeighbors(ArrayList<Node> nodeList) {
@@ -37,7 +43,16 @@ public class Node {
       int tmpDistance = newVector[i] + linkCost.get(m.getSenderID());
       if(distanceTable[i][m.getSenderID()] > tmpDistance) {
         distanceTable[i][m.getSenderID()] = tmpDistance;
+        isChanged = true;
       }
+    }
+    System.out.println("Them message sent from " + m.getSenderID() + " to " + m.getReceiverID() + "\n");
+    System.out.println("Node " + nodeID);
+    printDistanceTable();
+    if(isChanged){
+      System.out.println("\nThe distance table is changed\n");
+    }else{
+      System.out.println("\nThe distance table isn't changed\n");
     }
   }
 
@@ -50,6 +65,13 @@ public class Node {
   }
 
   private void notifyNeighbors() {
+    System.out.print("Sending message from " + nodeID+ " to ");
+    for(Node n: neighborList) {
+      System.out.print(n.nodeID + " ");
+    }
+    System.out.println("The message is: \n");
+    printDistanceVector();
+    System.out.println("\n");
     for(Node n: neighborList) {
       n.receiveUpdate(new Message(this.nodeID, n.nodeID, distanceVector));
     }
@@ -73,7 +95,7 @@ public class Node {
     }
   }
 
-  public Hashtable<String, Integer> getForwardingTable() {
+  public Hashtable<Integer, Integer> getForwardingTable() {
     // TODO: nodeID'leri String yap
     Hashtable forwardingTable = new Hashtable<Integer, Integer>();
     for(int i = 0; i < distanceTable.length; i++) {
@@ -127,18 +149,47 @@ public class Node {
       s+= "\t" + "NeigborID: " + key + ", Cost: " + linkCost.get(key) + "\n";
     }
     */
-    printTable(distanceTable);
-    System.out.println(getForwardingTable());
-    return null;
+    System.out.println("\nNode " + nodeID + ": ");
+
+    System.out.println("\nDistance Table:\n");
+    printDistanceTable();
+
+    System.out.println("\nForwarding Table:\n");
+    printForwardingTable();
+    return "";
   }
 
-  private void printTable(int arr[][]) {
-    for(int i = 0; i < arr.length; i++) {
-      for(int j = 0; j < arr[i].length; j++) {
-        System.out.print(arr[i][j] + ", ");
+  public void printDistanceTable() {
+    System.out.println("Via:      0       1       2       3       4");
+    System.out.println("----     ---     ---     ---     ---     ---");
+    for(int i = 0; i < distanceTable.length; i++) {
+      System.out.print("To " + i + ": ");
+      for(int j = 0; j < distanceTable[i].length; j++) {
+        System.out.printf("|%5d  ", distanceTable[i][j]);
       }
       System.out.print("\n");
     }
-    System.out.println("###############");
+  }
+
+  public void printForwardingTable() {
+    System.out.println(" ___________");
+    System.out.println("| To | From |");
+    System.out.println("|____|______|");
+    ArrayList<Integer> keys = new ArrayList<Integer>(getForwardingTable().keySet());
+    Collections.reverse(keys);
+    for(int i: keys){
+      System.out.printf("|%2d  |  %2d  |\n", i, getForwardingTable().get(i));
+      System.out.println("|____|______|");
+    }    
+  }
+
+  private void printDistanceVector() {
+    System.out.println("To:        0     1     2     3     4");
+    System.out.println("---       ---   ---   ---   ---   ---");
+    System.out.print("From " + nodeID + "  ");
+    for(int i = 0; i < distanceVector.length; i++) {
+        System.out.printf("|%3d  ", distanceVector[i]);
+    }   
+    System.out.print("|");
   }
 }

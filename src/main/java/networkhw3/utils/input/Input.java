@@ -1,12 +1,10 @@
 package networkhw3.utils.input;
 
-import javafx.util.Pair;
-import networkhw3.Node;
 import networkhw3.utils.logging.Logger;
 import networkhw3.utils.logging.LoggerFactory;
+import networkhw3.utils.Pair;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;

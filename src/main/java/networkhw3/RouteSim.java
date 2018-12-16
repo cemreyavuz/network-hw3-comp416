@@ -1,9 +1,9 @@
 package networkhw3;
 
-import javafx.util.Pair;
 import networkhw3.utils.input.Input;
 import networkhw3.utils.logging.Logger;
 import networkhw3.utils.logging.LoggerFactory;
+import networkhw3.utils.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,17 +34,30 @@ public class RouteSim {
 
   private void runLoop() {
     Boolean isChanged = true;
-    int counter = 0;
+    int counter = 1;
     while(isChanged) {
+      System.out.println("Iteration " + counter + " \n");
       isChanged = false;
       updateDynamicLinks();
       for (Node n : nodeList) {
         if (n.sendUpdate())
           isChanged = true;
       }
+      for (Node n : nodeList) {
+        System.out.println("Node " + n.nodeID);
+        n.printDistanceTable();
+        System.out.println("\n");
+      }
       counter++;
     }
-    System.out.println(counter);
+    System.out.println("The algorithm converged in " + (counter - 1) + " iterations");
+    System.out.println("The final distance tables and forwarding tables of nodes areas follows:");
+    for (Node n : nodeList) {
+      System.out.println("Node " + n.nodeID);
+      n.printDistanceTable();
+      n.printForwardingTable();
+      System.out.println("\n");
+    }
   }
 
   private void updateDynamicLinks() {
