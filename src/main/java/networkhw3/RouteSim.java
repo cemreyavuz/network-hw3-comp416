@@ -29,6 +29,7 @@ public class RouteSim {
     ArrayList pairList = p.getKey();
     dynamicLinks = p.getValue();
     initializeNodes(pairList);
+    System.out.println();
     runLoop();
   }
 
