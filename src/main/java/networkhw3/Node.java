@@ -11,7 +11,7 @@ import networkhw3.utils.logging.LoggerFactory;
 
 public class Node {
   public int nodeID;
-  private Hashtable<Integer, Integer> linkCost;
+  public Hashtable<Integer, Integer> linkCost;
   private ArrayList<Node> neighborList;
   private int [][] distanceTable;
   private int [] distanceVector = null;
