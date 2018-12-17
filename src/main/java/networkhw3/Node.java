@@ -36,7 +36,7 @@ public class Node {
     int[] newVector = m.getDistanceVector();
     boolean isChanged = false;
     for(int i = 0; i < nodeNum; i++) {
-      int tmpDistance = newVector[i] + distanceTable[m.getSenderID()][nodeID];
+      int tmpDistance = newVector[i] + distanceTable[m.getSenderID()][m.getSenderID()];
       if(distanceTable[i][m.getSenderID()] > tmpDistance) {
         distanceTable[i][m.getSenderID()] = tmpDistance;
         isChanged = true;
@@ -91,15 +91,18 @@ public class Node {
     }
   }
 
-  public Hashtable<Integer, Integer> getForwardingTable() {
-    Hashtable<Integer, Integer> forwardingTable = new Hashtable<>();
+  public Hashtable<Integer, ArrayList<Integer>> getForwardingTable() {
+    Hashtable<Integer, ArrayList<Integer>> forwardingTable = new Hashtable<>();
     for(int i = 0; i < distanceTable.length; i++) {
       int minNum = 999;
-      int via = nodeID;
+      ArrayList<Integer> via = new ArrayList<>(nodeID);
       for(int j = 0; j < distanceTable[i].length; j++) {
         if(distanceTable[i][j] < minNum) {
           minNum = distanceTable[i][j];
-          via = j;
+          via.removeAll(via);
+          via.add(j);
+        }else if(distanceTable[i][j] == minNum){
+          via.add(j);
         }
       }
       forwardingTable.put(i, via);
@@ -167,14 +170,18 @@ public class Node {
   }
 
   public void printForwardingTable() {
-    System.out.println(" ___________");
-    System.out.println("| To | From |");
-    System.out.println("|____|______|");
+    System.out.println(" ______________");
+    System.out.println("| To |   From  |");
+    System.out.println("|____|_________|");
     ArrayList<Integer> keys = new ArrayList<Integer>(getForwardingTable().keySet());
     Collections.reverse(keys);
     for(int i: keys){
-      System.out.printf("|%2d  |  %2d  |\n", i, getForwardingTable().get(i));
-      System.out.println("|____|______|");
+      System.out.printf("|%2d  |   ", i);
+      for(int j: getForwardingTable().get(i)){
+        System.out.printf("%d  ", j);
+      }
+      System.out.print("\n");
+      System.out.println("|____|_________");
     }    
   }
 

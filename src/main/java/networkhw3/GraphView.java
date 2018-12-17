@@ -61,12 +61,12 @@ public class GraphView extends JFrame {
 
     // Initializing button
     JButton b = new JButton("Calculate");
-    b.addActionListener(new ActionListener() {
+    /*b.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         visualizePath();
       }
-    });
+    });*/
 
     // Initializing combo boxes
     c1 = new JComboBox(nodes);
@@ -99,7 +99,7 @@ public class GraphView extends JFrame {
     initializeEdges();
   }
 
-  private void visualizePath() {
+  /*private void visualizePath() {
     clearPath();
     int source = c1.getSelectedIndex();
     int dest = c2.getSelectedIndex();
@@ -120,7 +120,7 @@ public class GraphView extends JFrame {
         e.addAttribute("ui.style", "fill-color: red; stroke-mode: plain; stroke-width: 3px; ");
       }
     }
-  }
+  }*/
 
   private void clearPath() {
     for(String str: edgeList.keySet()) {
