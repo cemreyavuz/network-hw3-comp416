@@ -9,7 +9,6 @@ public class Message {
     this.senderID = senderID;
     this.receiverID = receiverID;
     this.distanceVector = distanceVector;
-    this.log();
   }
 
   public int getSenderID() {
@@ -22,9 +21,5 @@ public class Message {
 
   public int[] getDistanceVector() {
     return this.distanceVector;
-  }
-
-  private void log() {
-    // TODO
   }
 }

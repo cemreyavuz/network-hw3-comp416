@@ -6,9 +6,6 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Random;
 
-import networkhw3.utils.logging.Logger;
-import networkhw3.utils.logging.LoggerFactory;
-
 public class Node {
   public int nodeID;
   public Hashtable<Integer, Integer> linkCost;
@@ -18,7 +15,6 @@ public class Node {
   private int nodeNum;
   private ArrayList<Integer> dynamicLinks;
   private Random r = new Random();
-  private Logger logger = LoggerFactory.getInstance().getLogger(getClass());
 
   public Node(int nodeID, Hashtable<Integer, Integer> linkCost, int nodeNum) {
     this.nodeID = nodeID;
@@ -46,7 +42,7 @@ public class Node {
         isChanged = true;
       }
     }
-    System.out.println("Them message sent from " + m.getSenderID() + " to " + m.getReceiverID() + "\n");
+    System.out.println("The message sent from " + m.getSenderID() + " to " + m.getReceiverID() + "\n");
     System.out.println("Node " + nodeID);
     printDistanceTable();
     if(isChanged){
@@ -96,11 +92,10 @@ public class Node {
   }
 
   public Hashtable<Integer, Integer> getForwardingTable() {
-    // TODO: nodeID'leri String yap
-    Hashtable forwardingTable = new Hashtable<Integer, Integer>();
+    Hashtable<Integer, Integer> forwardingTable = new Hashtable<>();
     for(int i = 0; i < distanceTable.length; i++) {
       int minNum = 999;
-      int via = -1;
+      int via = nodeID;
       for(int j = 0; j < distanceTable[i].length; j++) {
         if(distanceTable[i][j] < minNum) {
           minNum = distanceTable[i][j];

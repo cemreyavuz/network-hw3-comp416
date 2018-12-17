@@ -7,7 +7,6 @@ import networkhw3.utils.Pair;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui.view.Viewer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.Random;
 public class RouteSim {
   private Input input = Input.getInstance();
   private Logger logger = LoggerFactory.getInstance().getLogger(getClass());
-  private int numNode;
   private Hashtable<String, Edge> edgeList;
   private ArrayList<Node> nodeList;
   private ArrayList<Pair> dynamicLinks;
@@ -34,7 +32,7 @@ public class RouteSim {
     logger.i("RouteSim is working!");
     logger.i("RouteSim started to read the input file.");
     Pair<ArrayList, ArrayList> p = input.readFile();
-    ArrayList pairList = p.getKey();
+    ArrayList<Pair> pairList = p.getKey();
     dynamicLinks = p.getValue();
     initializeNodes(pairList);
     System.out.println();
@@ -66,10 +64,10 @@ public class RouteSim {
       }
       gv.updateGraph();
     }
-    System.out.println("The algorithm converged in " + (counter - 1) + " iterations");
-    System.out.println("The final distance tables and forwarding tables of nodes areas follows:");
+    System.out.println("The algorithm converged in " + (counter - 1) + " iterations\n");
+    System.out.println("The final distance tables and forwarding tables of nodes areas follows:\n");
     for (Node n : nodeList) {
-      System.out.println("Node " + n.nodeID);
+      System.out.println("Node " + n.nodeID + "\n");
       n.printDistanceTable();
       n.printForwardingTable();
       System.out.println("\n");

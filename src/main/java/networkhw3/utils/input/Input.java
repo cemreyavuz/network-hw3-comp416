@@ -7,12 +7,10 @@ import networkhw3.utils.Pair;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Scanner;
 
 public class Input {
   private Logger logger = LoggerFactory.getInstance().getLogger(getClass());
   private static volatile Input _instance = null;
-  private Scanner input;
   private int nodeID;
   private ArrayList<Pair> pairList;
   private ArrayList<Pair> dynamicLinks = new ArrayList<>();
