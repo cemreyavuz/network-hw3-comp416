@@ -3,6 +3,7 @@ package networkhw3;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
@@ -24,6 +25,8 @@ public class GraphView extends JFrame {
   private ArrayList<Node> nodeList;
   private JComboBox c1;
   private JComboBox c2;
+  private JPanel left;
+  private JPanel right;
 
   private GraphView(Hashtable<String, Edge> edgeList, ArrayList<Node> nodeList) {
     this.edgeList = edgeList;
@@ -39,29 +42,16 @@ public class GraphView extends JFrame {
   }
 
   private void initialize() {
-    // Initializing the JFrame and Graph
-    graph = new MultiGraph("Bazinga!");
-    graph.addAttribute("ui.stylesheet", "node { size: 50px; fill-color: #dbdbdb; text-size: 30px; } edge { text-size: 30px; }");
-    viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-    view = viewer.addDefaultView(false);
-    viewer.enableAutoLayout();
-    add((Component)view, BorderLayout.CENTER);
-    setSize(new Dimension(1400, 720));
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setVisible(true);
+    // Initializing panels
+    left = new JPanel();
+    left.setPreferredSize(new Dimension(990, 680));
+    left.setBorder(BorderFactory.createEtchedBorder());
+    left.setBackground(Color.white);
+    this.right = new JPanel();
+    this.right.setPreferredSize(new Dimension(270, 680));
+    this.right.setBorder(BorderFactory.createEtchedBorder());
 
-    // Initializing Nodes and Edges
-    initializeNodes();
-    initializeEdges();
-
-    initializeRightPanel();
-  }
-
-  private void initializeRightPanel() {
-    // Adding calculate button
-    JPanel jp = new JPanel();
-    jp.setPreferredSize(new Dimension(300, 720));
-
+    // Preparing nodes array for combo boxes
     String[] nodes = new String[nodeList.size()];
     int counter = 0;
     for(Node n: nodeList) {
@@ -83,11 +73,30 @@ public class GraphView extends JFrame {
     c2 = new JComboBox(nodes);
 
     // Adding components to panel
-    jp.add(b, BorderLayout.EAST);
-    jp.add(c1, BorderLayout.EAST);
-    jp.add(c2, BorderLayout.EAST);
-    add(jp, BorderLayout.EAST);
-    jp.setVisible(true);
+    right.add(b, BorderLayout.EAST);
+    right.add(c1, BorderLayout.EAST);
+    right.add(c2, BorderLayout.EAST);
+
+    add(left, BorderLayout.WEST);
+    add(right, BorderLayout.EAST);
+
+    // Initializing the JFrame and Graph
+    graph = new MultiGraph("Bazinga!");
+    graph.addAttribute("ui.stylesheet", "node { size: 50px; fill-color: #dbdbdb; text-size: 30px; } edge { text-size: 30px; }");
+    viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+    view = viewer.addDefaultView(false);
+    ((ViewPanel) view).setPreferredSize(new Dimension(980, 670));
+    viewer.enableAutoLayout();
+    left.add((Component)view);
+    setSize(new Dimension(1280, 720));
+    setResizable(false);
+    setTitle("RouteSim");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setVisible(true);
+
+    // Initializing Nodes and Edges
+    initializeNodes();
+    initializeEdges();
   }
 
   private void visualizePath() {
