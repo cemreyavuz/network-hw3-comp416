@@ -25,7 +25,7 @@ public class RouteSim {
 
   public RouteSim() {
     edgeList = new Hashtable<>();
-    System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+    System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
   }
 
   public void run() throws IOException {
