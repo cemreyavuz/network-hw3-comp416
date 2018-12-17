@@ -43,6 +43,7 @@ public class RouteSim {
     Boolean isChanged = true;
     int counter = 1;
     while(isChanged) {
+      System.out.println("##################################################\n");
       System.out.println("Iteration " + counter + " \n");
       isChanged = false;
       updateDynamicLinks();
@@ -50,6 +51,8 @@ public class RouteSim {
         if (n.sendUpdate())
           isChanged = true;
       }
+      System.out.println("..................................................\n");
+      System.out.println("Distance tables at end of the iteration: \n");
       for (Node n : nodeList) {
         System.out.println("Node " + n.nodeID);
         n.printDistanceTable();
@@ -64,8 +67,9 @@ public class RouteSim {
       }
       gv.updateGraph();
     }
+    System.out.println("##################################################\n");
     System.out.println("The algorithm converged in " + (counter - 1) + " iterations\n");
-    System.out.println("The final distance tables and forwarding tables of nodes areas follows:\n");
+    System.out.println("The final distance tables and forwarding tables of nodes are as follows:\n");
     for (Node n : nodeList) {
       System.out.println("Node " + n.nodeID + "\n");
       n.printDistanceTable();

@@ -42,6 +42,7 @@ public class Node {
         isChanged = true;
       }
     }
+    System.out.println("..................................................\n");
     System.out.println("The message sent from " + m.getSenderID() + " to " + m.getReceiverID() + "\n");
     System.out.println("Node " + nodeID);
     printDistanceTable();
@@ -61,6 +62,7 @@ public class Node {
   }
 
   private void notifyNeighbors() {
+    System.out.println("..................................................\n");
     System.out.print("Sending message from " + nodeID+ " to ");
     for(Node n: neighborList) {
       System.out.print(n.nodeID + " ");
