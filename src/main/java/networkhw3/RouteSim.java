@@ -47,6 +47,7 @@ public class RouteSim {
       System.out.println("Iteration " + counter + " \n");
       isChanged = false;
       updateDynamicLinks();
+      gv.updateGraph();
       for (Node n : nodeList) {
         if (n.sendUpdate())
           isChanged = true;
@@ -65,7 +66,6 @@ public class RouteSim {
       catch (InterruptedException e) {
 
       }
-      gv.updateGraph();
     }
     System.out.println("##################################################\n");
     System.out.println("The algorithm converged in " + (counter - 1) + " iterations\n");
