@@ -43,7 +43,7 @@ public class GraphView extends JFrame {
    * getInstance method for Singleton GraphView class.
    * @param edgeList Hashtable with the key-value pairs of String-Edge
    * @param nodeList ArrayList which keeps the list of nodes.
-   * @return
+   * @return a Singleton GraphView object
    */
   public static synchronized GraphView getInstance(Hashtable<String, Edge> edgeList, ArrayList<Node> nodeList) {
     if(_instance == null) {
