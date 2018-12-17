@@ -6,6 +6,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
+import scala.xml.Null;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -75,12 +76,12 @@ public class GraphView extends JFrame {
 
     // Initializing button
     JButton b = new JButton("Calculate");
-    /*b.addActionListener(new ActionListener() {
+    b.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         visualizePath();
       }
-    });*/
+    });
 
     // Initializing combo boxes
     c1 = new JComboBox(nodes);
@@ -121,7 +122,7 @@ public class GraphView extends JFrame {
    * In each iteration in while loop, source node is changed with new node
    * which returns from the source node's forwarding table's entry for
    * destination node.
-   *//*
+   */
   private void visualizePath() {
     clearPath();
     int source = c1.getSelectedIndex();
@@ -131,9 +132,15 @@ public class GraphView extends JFrame {
     int oldIndex = source;
     while(s != d) {
       oldIndex = s.nodeID;
-      s = nodeList.get(s.getForwardingTable().get(dest));
-      String str = oldIndex + "-" + s.nodeID;
+      ArrayList<Integer> arr = s.getForwardingTable().get(dest);
+      int tCounter = 0;
       // System.out.println(str);
+      s = nodeList.get(arr.get(tCounter));
+      if(s.nodeID == oldIndex) {
+        tCounter++;
+        s = nodeList.get(arr.get(tCounter));
+      }
+      String str = oldIndex + "-" + s.nodeID;
       if(!edgeList.keySet().contains(str)) {
         Edge e = edgeList.get(s.nodeID + "-" + oldIndex);
         e.addAttribute("ui.style", "fill-color: red; stroke-mode: plain; stroke-width: 3px; ");
@@ -144,7 +151,7 @@ public class GraphView extends JFrame {
       }
     }
   }
-  */
+
   /**
    * This function clear the previous indicated path on graph.
    * It iterates through 'edgeList' and clear all the paths.

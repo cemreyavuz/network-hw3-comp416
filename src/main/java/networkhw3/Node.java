@@ -181,7 +181,7 @@ public class Node {
         System.out.printf("%d  ", j);
       }
       System.out.print("\n");
-      System.out.println("|____|_________");
+      System.out.println("|____|_________|");
     }    
   }
 
