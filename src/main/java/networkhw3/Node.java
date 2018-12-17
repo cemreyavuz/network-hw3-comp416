@@ -36,7 +36,7 @@ public class Node {
     int[] newVector = m.getDistanceVector();
     boolean isChanged = false;
     for(int i = 0; i < nodeNum; i++) {
-      int tmpDistance = newVector[i] + linkCost.get(m.getSenderID());
+      int tmpDistance = newVector[i] + distanceTable[m.getSenderID()][nodeID];
       if(distanceTable[i][m.getSenderID()] > tmpDistance) {
         distanceTable[i][m.getSenderID()] = tmpDistance;
         isChanged = true;
