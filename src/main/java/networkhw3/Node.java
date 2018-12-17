@@ -11,6 +11,7 @@ public class Node {
   public Hashtable<Integer, Integer> linkCost;
   private ArrayList<Node> neighborList;
   private int [][] distanceTable;
+  private ArrayList<Integer> updatedLinks;
   private int [] distanceVector = null;
   private int nodeNum;
   private ArrayList<Integer> dynamicLinks;
@@ -21,10 +22,15 @@ public class Node {
     this.linkCost = linkCost;
     this.nodeNum = nodeNum;
     dynamicLinks = new ArrayList<>();
+    updatedLinks = new ArrayList<>();
     initializeTable();
     this.toString();
   }
 
+  /**
+   * Creates the neighbor node list
+   * @param nodeList the list of neighbor nodes
+   */
   public void addNeighbors(ArrayList<Node> nodeList) {
     neighborList = new ArrayList<>();
     for(int k: linkCost.keySet()) {
@@ -32,16 +38,21 @@ public class Node {
     }
   }
 
+  /**
+   * Recieves the distance vector from another node and updates itself accordingly
+   * @param m message
+   */
   public void receiveUpdate(Message m) {
     int[] newVector = m.getDistanceVector();
     boolean isChanged = false;
     for(int i = 0; i < nodeNum; i++) {
       int tmpDistance = newVector[i] + distanceTable[m.getSenderID()][m.getSenderID()];
-      if(distanceTable[i][m.getSenderID()] > tmpDistance) {
-        distanceTable[i][m.getSenderID()] = tmpDistance;
+      if(distanceTable[i][m.getSenderID()] != tmpDistance) {
         isChanged = true;
       }
+      distanceTable[i][m.getSenderID()] = tmpDistance;
     }
+    
     System.out.println("..................................................\n");
     System.out.println("The message sent from " + m.getSenderID() + " to " + m.getReceiverID() + "\n");
     System.out.println("Node " + nodeID);
@@ -53,6 +64,10 @@ public class Node {
     }
   }
 
+  /**
+   * Sends update to each neighbour node
+   * @return a boolean designating if the distance vector is changed
+   */
   public boolean sendUpdate() {
     if(updateDistanceVector()) {
       notifyNeighbors();
@@ -61,6 +76,9 @@ public class Node {
     return false;
   }
 
+  /**
+   * Notifies neighbour nodes
+   */
   private void notifyNeighbors() {
     System.out.println("..................................................\n");
     System.out.print("Sending message from " + nodeID+ " to ");
@@ -75,6 +93,10 @@ public class Node {
     }
   }
 
+  /**
+   * Updates the distance vector
+   * @return a boolean designating wheter the distance vector is updated
+   */
   private boolean updateDistanceVector() {
     int tempDistanceVector[] = new int[nodeNum];
     for(int i = 0; i < distanceTable.length; i++) {
@@ -93,6 +115,10 @@ public class Node {
     }
   }
 
+  /**
+   * Creates the forwarding table
+   * @return the forwarding table
+   */
   public Hashtable<Integer, ArrayList<Integer>> getForwardingTable() {
     Hashtable<Integer, ArrayList<Integer>> forwardingTable = new Hashtable<>();
     for(int i = 0; i < distanceTable.length; i++) {
@@ -112,6 +138,9 @@ public class Node {
     return forwardingTable;
   }
 
+  /**
+   * Initializes the distance table
+   */
   private void initializeTable() {
     distanceTable = new int[nodeNum][nodeNum];
     for(int i = 0; i < distanceTable.length; i++) {
@@ -135,20 +164,27 @@ public class Node {
     }
   }
 
+  /**
+   * Sets the dynamic links new cost
+   * @param neighborID Id of the neighbour
+   * @param cost the new cost to the neighbour
+   */
   public void updateDynamicLinks(int neighborID, int cost) {
-    linkCost.put(neighborID, cost);
-    distanceTable[neighborID][neighborID] = cost;
+    if(!updatedLinks.contains(neighborID)){
+      updatedLinks.add(neighborID);
+      linkCost.put(neighborID, cost);
+      distanceTable[neighborID][neighborID] = cost;
+    }
+  }
+  
+  /**
+   * Resets the updated nodes
+   */
+  public void resetUpdates(){
+    updatedLinks.removeAll(updatedLinks);
   }
 
   public String toString() {
-    /*
-    String s = "";
-    s += "\nNodeID: " + nodeID + "\n";
-    s += "Link Costs: \n";
-    for(Integer key: linkCost.keySet()) {
-      s+= "\t" + "NeigborID: " + key + ", Cost: " + linkCost.get(key) + "\n";
-    }
-    */
     System.out.println("\nNode " + nodeID + ": ");
 
     System.out.println("\nDistance Table:\n");
@@ -159,6 +195,9 @@ public class Node {
     return "";
   }
 
+  /**
+   * Prints distance table
+   */
   public void printDistanceTable() {
     System.out.println("Via:      0       1       2       3       4");
     System.out.println("----     ---     ---     ---     ---     ---");
@@ -171,6 +210,9 @@ public class Node {
     }
   }
 
+  /**
+   * Prints forwarding table
+   */
   public void printForwardingTable() {
     System.out.println(" ______________");
     System.out.println("| To |   From  |");
@@ -187,6 +229,9 @@ public class Node {
     }    
   }
 
+  /**
+   * Prints distance vector
+   */
   private void printDistanceVector() {
     System.out.println("To:        0     1     2     3     4");
     System.out.println("---       ---   ---   ---   ---   ---");

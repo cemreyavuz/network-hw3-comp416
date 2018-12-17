@@ -6,7 +6,6 @@ import networkhw3.utils.logging.LoggerFactory;
 import networkhw3.utils.Pair;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.MultiGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +27,10 @@ public class RouteSim {
     System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
   }
 
+  /**
+   * Initializes the nodes and starts the simulation
+   * @throws IOException
+   */
   public void run() throws IOException {
     logger.i("RouteSim is working!");
     logger.i("RouteSim started to read the input file.");
@@ -39,6 +42,11 @@ public class RouteSim {
     runLoop();
   }
 
+  /**
+   * The main loop of the simulation
+   * Updates the dynamic links if they are existing
+   * Iterates the distance calculations
+   */
   private void runLoop() {
     Boolean isChanged = true;
     int counter = 1;
@@ -60,11 +68,12 @@ public class RouteSim {
         System.out.println("\n");
       }
       counter++;
+      // To make it easy to see the changes in the animation
       try {
         Thread.sleep(1000);
       }
       catch (InterruptedException e) {
-
+        e.printStackTrace();
       }
     }
     System.out.println("##################################################\n");
@@ -78,17 +87,26 @@ public class RouteSim {
     }
   }
 
+  /**
+   * Updates all the dynamic links
+   */
   private void updateDynamicLinks() {
     for(Pair<Integer, Integer> p: dynamicLinks) {
       if(r.nextBoolean()) {
         int dynamicCost = r.nextInt(10)+1;
         nodeList.get(p.getKey()).updateDynamicLinks(p.getValue(), dynamicCost);
         nodeList.get(p.getValue()).updateDynamicLinks(p.getKey(), dynamicCost);
-        // TODO: duplicate changes (not crucial but do it if you have time)
       }
+    }
+    for(Node n: nodeList){
+      n.resetUpdates();
     }
   }
 
+  /**
+   * Initializes nodes
+   * @param pairList the pair list from the input
+   */
   private void initializeNodes(ArrayList<Pair> pairList) {
     nodeList = new ArrayList<Node>();
     for(Pair<Integer, Hashtable<Integer, Integer>> p: pairList) {
