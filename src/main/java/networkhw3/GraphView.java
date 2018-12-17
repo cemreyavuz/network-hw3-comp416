@@ -28,12 +28,23 @@ public class GraphView extends JFrame {
   private JPanel left;
   private JPanel right;
 
+  /**
+   * Private constructor of Singleton GraphView class.
+   * @param edgeList
+   * @param nodeList
+   */
   private GraphView(Hashtable<String, Edge> edgeList, ArrayList<Node> nodeList) {
     this.edgeList = edgeList;
     this.nodeList = nodeList;
     initialize();
   }
 
+  /**
+   * getInstance method for Singleton GraphView class.
+   * @param edgeList Hashtable with the key-value pairs of String-Edge
+   * @param nodeList ArrayList which keeps the list of nodes.
+   * @return a Singleton GraphView object
+   */
   public static synchronized GraphView getInstance(Hashtable<String, Edge> edgeList, ArrayList<Node> nodeList) {
     if(_instance == null) {
       _instance = new GraphView(edgeList, nodeList);
@@ -41,6 +52,9 @@ public class GraphView extends JFrame {
     return _instance;
   }
 
+  /**
+   * This function initializes the necessary GUI components.
+   */
   private void initialize() {
     // Initializing panels
     left = new JPanel();
@@ -77,6 +91,7 @@ public class GraphView extends JFrame {
     right.add(c1, BorderLayout.EAST);
     right.add(c2, BorderLayout.EAST);
 
+    // Adding panels to frame
     add(left, BorderLayout.WEST);
     add(right, BorderLayout.EAST);
 
@@ -94,12 +109,20 @@ public class GraphView extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
 
-    // Initializing Nodes and Edges
+    // Functions calls for initializing Nodes and Edges
     initializeNodes();
     initializeEdges();
   }
 
-  /*private void visualizePath() {
+  /**
+   * This function visualizes the path selected in combo boxes.
+   * It starts with two nodes (source and destination) and iterates
+   * in while loop until source and destination nodes are the same nodes.
+   * In each iteration in while loop, source node is changed with new node
+   * which returns from the source node's forwarding table's entry for
+   * destination node.
+   *//*
+  private void visualizePath() {
     clearPath();
     int source = c1.getSelectedIndex();
     int dest = c2.getSelectedIndex();
@@ -120,8 +143,12 @@ public class GraphView extends JFrame {
         e.addAttribute("ui.style", "fill-color: red; stroke-mode: plain; stroke-width: 3px; ");
       }
     }
-  }*/
-
+  }
+  */
+  /**
+   * This function clear the previous indicated path on graph.
+   * It iterates through 'edgeList' and clear all the paths.
+   */
   private void clearPath() {
     for(String str: edgeList.keySet()) {
       Edge e = edgeList.get(str);
@@ -129,6 +156,11 @@ public class GraphView extends JFrame {
     }
   }
 
+  /**
+   * This function initializes the nodes on the graph.
+   * It iterates through 'nodeList' and creates a new node
+   * on the graph with node's nodeID for each node in the list.
+   */
   private void initializeNodes() {
     for(Node n: nodeList) {
       org.graphstream.graph.Node no = graph.addNode(Integer.toString(n.nodeID));
@@ -136,6 +168,14 @@ public class GraphView extends JFrame {
     }
   }
 
+  /**
+   * This function initialize the edges on the graph.
+   * It iterates through each node in the 'nodeList' and
+   * checks whether there exists a edge between nodes' and
+   * their neighbors. If there is, it continues the loop,
+   * otherwise, it creates a new edge on graph and adds those
+   * new edges to 'edgeList'.
+   */
   private void initializeEdges() {
     for(Node n: nodeList) {
       int nodeID = n.nodeID;
@@ -151,6 +191,11 @@ public class GraphView extends JFrame {
     }
   }
 
+  /**
+   * This function updates the graph.
+   * It iterates through each node in the 'nodeList' and
+   * updates those nodes' link costs to their neighbors.
+   */
   public void updateGraph() {
     for(Node n: nodeList) {
       int nodeID = n.nodeID;
